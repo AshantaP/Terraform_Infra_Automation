@@ -1,0 +1,24 @@
+pipeline {
+    agent any
+    environment {
+        SERVER_CREDENTIALS = credentials('AWS_CREDS_TERRAFORM')
+    }
+    stages {
+        stage('Git-Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/AshantaP/Terraform-prod.git'
+            }
+        }
+        stage('Shell-Command') {
+            steps {
+                sh 'echo "Hello World"'
+                sh '''
+                    echo "Multiline shell steps works too"
+                    cd /var/lib/jenkins/workspace
+                    terraform init
+                    terraform plan
+                '''
+            }
+        }
+    }
+}
